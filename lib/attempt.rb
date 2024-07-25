@@ -1,53 +1,52 @@
-class Attempt
-  COLORS = {
-    Red: '  Red  '.colorize(:red),
-    Green: ' Green '.colorize(:green),
-    Blue: ' Blue  '.colorize(:blue),
-    Yellow: 'Yellow '.colorize(:yellow),
-    Gray: ' Gray  '.colorize(:gray),
-    Cyan: ' Cyan  '.colorize(:cyan),
-    Magenta: 'Magenta'.colorize(:magenta),
-    Orange: 'Orange '.colorize(:light_red)
-  }.freeze
+require 'colorize' # rubocop:disable Style/FrozenStringLiteralComment
+require_relative 'place'
 
-  attr_accessor :attempt_no, :one, :two, :three, :four, :hint_s
+# Creates new object for each attempt
+class Attempt
+  attr_accessor :attempt_no
 
   def initialize(attempt_no)
     @attempt_no = attempt_no
     @hint_s = ''
-    @one = nil
-    @two = nil
-    @three = nil
-    @four = nil
+    @guesses_a = Array.new(4) { Place.new }
   end
 
-  def give_hint_s(secret_code_a)
-    guesses_a = [one, two, three, four]
-    return nil if guesses_a.any?(&:nil?)
+  def set_color
+    puts 'Enter position (1 to 4): '
+    loop do
+      pos = gets.chomp
+      break if pos in (1..4)
 
-    guesses_a.each_with_index do |guess, index|
-      next unless guess == secret_code_a[index] # rubocop:disable Layout/EmptyLineAfterGuardClause
-      self.hint_s = "#{hint_s}O"
-      secret_code_a[index] = nil
-      guesses_a[index] = nil
+      puts 'Please enter a valid number (from 1 to 4)'
+    end
+    @guesses_a[pos - 1].color = (gets)
+  end
+
+  def hint_s(secret_code_a)
+    return '' if @guesses_a.any? { |place| place.color.nil? }
+
+    guesses_copy = []
+    guesses_copy.replace(@guesses_a)
+
+    4.times do |i|
+      next unless guesses_copy[i].color == secret_code_a[i] # rubocop:disable Layout/EmptyLineAfterGuardClause
+      @hint_s = "#{@hint_s}O"
+      secret_code_a[i] = nil
+      guesses_copy[i] = nil
     end
 
-    guesses_a.each do |guess|
-      next if guess.nil? # rubocop:disable Layout/EmptyLineAfterGuardClause
-      i = secret_code_a.index(guess)
-      self.hint_s = i.nil? ? "#{hint_s}X" : "#{hint_s}C"
+    guesses_copy.each do |place|
+      next if place.nil? # rubocop:disable Layout/EmptyLineAfterGuardClause
+      i = secret_code_a.index(place)
+      @hint_s = i.nil? ? "#{@hint_s}X" : "#{@hint_s}C"
       secret_code_a[i] = nil unless i.nil?
-      # guesses_a[index] = nil
     end
 
-    hint_s
-  end
-
-  def valid_color?(color)
-    COLORS.include? color.capitalize.to_sym
+    @hint_s
   end
 
   def to_s
-    "(#{COLORS[one]})   (#{COLORS[two]})   (#{COLORS[three]})   (#{COLORS[four]})   |  #{hint_s}"
+    "(#{COLORS[@guesses_a[0]]})   (#{COLORS[@guesses_a[1]]})   (#{COLORS[@guesses_a[2]]})   (#{COLORS[@guesses_a[3]]})\
+       |  #{hint_s}"
   end
 end
