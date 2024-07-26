@@ -25,23 +25,24 @@ class Board
   end
 
   def do_attempt(attempt_i)
-    this_attempt = Attempt.new(attempt_i)
+    this_attempt = Attempt.new(attempt_i, secret_code_a)
 
     loop do
       puts BOARD_TOP
       puts @board_s_a
       puts this_attempt
-      unless this_attempt.hint_s(secret_code_a).empty?
+      guessed = this_attempt.hint_s
+      unless guessed.empty?
         puts 'Do you want to submit your guess?(y or n)'
         break if gets.downcase.chomp == 'y'
       end
-      (12 - 2 - attempt_i).times { puts EMPTY_ROW }
+      (12 - 1 - attempt_i).times { puts EMPTY_ROW }
       this_attempt.set_color
     end
 
     board_s_a.push this_attempt.to_s
     self.attempt_i = attempt_i + 1
-    winner?(this_attempt.hint_s(secret_code_a))
+    winner?(this_attempt.hint_s)
 
     # loop do
     #   puts 'Position? (1 to 4) :'

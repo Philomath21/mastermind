@@ -3,27 +3,30 @@ require_relative 'place'
 
 # Creates new object for each attempt
 class Attempt
-  attr_accessor :attempt_no
+  attr_accessor :attempt_no, :secret_code_a
 
-  def initialize(attempt_no)
+  def initialize(attempt_no, secret_code_a)
     @attempt_no = attempt_no
     @hint_s = ''
     @guesses_a = Array.new(4) { Place.new }
+    @secret_code_a = secret_code_a
   end
 
   def set_color
     puts 'Enter position (1 to 4): '
+    pos = 0
     loop do
-      pos = gets.chomp
+      pos = gets.to_i
       break if pos in (1..4)
 
       puts 'Please enter a valid number (from 1 to 4)'
     end
+    puts 'Enter color: '
     @guesses_a[pos - 1].color = (gets)
   end
 
-  def hint_s(secret_code_a)
-    return '' if @guesses_a.any? { |place| place.color.nil? }
+  def hint_s
+    return @hint_s if @guesses_a.any? { |place| place.color == '       ' }
 
     guesses_copy = []
     guesses_copy.replace(@guesses_a)

@@ -8,9 +8,8 @@ game = Board.new
 # end
 
 while game.attempt_i < 12
-  win = game.do_attempt
-  if win
-    puts 'You are the mastermind!'
-    break
-  end
+  win = game.do_attempt(game.attempt_i)
+  puts 'You are the mastermind!' if win
+  break if win
 end
+puts 'You lost!' unless win

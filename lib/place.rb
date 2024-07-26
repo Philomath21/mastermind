@@ -8,7 +8,8 @@ COLORS = {
   Gray: ' Gray  '.colorize(:gray),
   Cyan: ' Cyan  '.colorize(:cyan),
   Magenta: 'Magenta'.colorize(:magenta),
-  Orange: 'Orange '.colorize(:light_red)
+  Orange: 'Orange '.colorize(:light_red),
+  "       ": '       '
 }.freeze
 
 # Creates new color object for all 4 places
