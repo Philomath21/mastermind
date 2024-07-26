@@ -26,8 +26,6 @@ COLORS_HASH = {
   8 => '8'.colorize(:light_red)
 }.freeze
 
-COLORS_HASH.each_value { |color| puts color }
-
 # Code for game interface
 secret_code_a = [1, 3, 6, 5]
 
@@ -36,8 +34,13 @@ secret_code_a = [1, 3, 6, 5]
   o = 0 # Correct color, at right place
   x = 0 # Incorrect color
 
-  # Getting input of guess for 4 places. Format: '1486'
+  # Start of turn printing
   puts "Turn #{turn} (#{12 - turn} remaining)"
+  print 'Colors & their indices: '
+  COLORS_HASH.each_value { |color| print "#{color} " }
+  puts ' '
+
+  # Getting input of guess for 4 places. Format: '1486'
   puts 'Enter your code guess:'
   guess_a = gets.chomp.split('').map(&:to_i)
   p_guess_a = guess_a.map { |i| COLORS_HASH[i] }
@@ -49,6 +52,7 @@ secret_code_a = [1, 3, 6, 5]
   puts "Correct color, at right place: #{o} guesses"
   puts "Correct color, at wrong place: #{4 - o - x} guesses"
   puts "Incorrect color              : #{x} guesses"
+  puts ' '
 
   # Checking for win
   if guess_a == secret_code_a
