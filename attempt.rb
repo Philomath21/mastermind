@@ -22,7 +22,7 @@ class Attempt
       puts 'Please enter a valid number (from 1 to 4)'
     end
     puts 'Enter color: '
-    @guesses_a[pos - 1].color = (gets)
+    @guesses_a[pos - 1].color = (gets.chomp)
   end
 
   def hint_s
@@ -49,7 +49,7 @@ class Attempt
   end
 
   def to_s
-    "(#{COLORS[@guesses_a[0]]})   (#{COLORS[@guesses_a[1]]})   (#{COLORS[@guesses_a[2]]})   (#{COLORS[@guesses_a[3]]})\
-       |  #{hint_s}"
+    "(#{COLORS[@guesses_a[0].to_s]})   (#{COLORS[@guesses_a[1].to_s]})   (#{COLORS[@guesses_a[2].to_s]})\
+       (#{COLORS[@guesses_a[3].to_s]})  |  #{hint_s}"
   end
 end

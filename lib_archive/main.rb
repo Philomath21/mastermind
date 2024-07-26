@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require_relative 'board'
 require_relative 'attempt'
+require 'pry-byebug'
 
 game = Board.new
 # while game.attempt_i < 12

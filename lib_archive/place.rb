@@ -23,7 +23,7 @@ class Place
   def color=(col)
     col = col.capitalize.to_sym
     if COLORS.include? col
-      self.color = col
+      @color = col
     else
       puts 'Please enter a valid color input'
     end

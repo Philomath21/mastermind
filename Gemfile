@@ -7,3 +7,5 @@ source 'https://rubygems.org'
 gem 'rubocop', '~> 1.65'
 
 gem 'colorize', '~> 1.1'
+
+gem "pry-byebug", "~> 3.10"

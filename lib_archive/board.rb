@@ -31,6 +31,7 @@ class Board
       puts BOARD_TOP
       puts @board_s_a
       puts this_attempt
+      # binding.pry
       guessed = this_attempt.hint_s
       unless guessed.empty?
         puts 'Do you want to submit your guess?(y or n)'
