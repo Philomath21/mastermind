@@ -2,31 +2,17 @@
 
 ### Game interface ########################################
 
-# Turn #{turn} (#{12 - turn} remaining)
-# Enter your code guess: # example: 1357
-# gets
-# [1] [3] [5] [7] (colored)
-# "Correct color, at right place: #{O} guesses"
-# "Correct color, at wrong place: #{C} guesses"
-# "Incorrect color              : #{X} guesses"
+# Turn 1 (12 remaining)
+# Enter your code guess: gets # example: 1357
 #
+# [1] [3] [5] [7] (colored)
+# "Correct color, at right place: 1 guesses"
+# "Correct color, at wrong place: 2 guesses"
+# "Incorrect color              : 1 guesses"
+
 ###########################################################
 require 'colorize'
 require 'io/console'
-
-# Selecting code maker & code breaker (person or computer)
-
-def select_roles
-  roles_hash = { maker: nil, breaker: nil }
-  roles_hash.each_key do |role|
-    puts "Select the code #{role}: press,
-  > '1' for Player
-  > '2' for Computer\n"
-    i = gets.chomp.to_i
-    roles_hash[role] = i == 1 ? 'user' : 'comp'
-  end
-  roles_hash
-end
 
 # Colors hash & its printing
 COLORS_HASH = {
@@ -40,7 +26,31 @@ COLORS_HASH = {
   8 => '8'.colorize(:light_red)
 }.freeze
 
-# Start of turn printing
+# Selecting code maker & code breaker (person or computer)
+def select_roles
+  roles_hash = { maker: nil, breaker: nil }
+  roles_hash.each_key do |role|
+    puts "Select the code #{role}:
+  > press '1' for Player
+  > press '2' for Computer"
+    user_input = gets.chomp.to_i
+    roles_hash[role] = user_input == 1 ? 'user' : 'comp'
+  end
+  roles_hash
+end
+
+# Code maker
+def make_code(code_maker)
+  return Array.new(4) { (1..8).to_a.sample } if code_maker == 'comp'
+
+  puts 'Code maker, please enter your secret code: '
+  secret_code_a = $stdin.noecho(&:gets).chomp # For hidden input
+  secret_code_a.split('').map(&:to_i)
+end
+
+# Code breaker
+
+## Printing at start of turn
 def print_turn_start(turn)
   puts "Turn #{turn} (#{12 - turn + 1} remaining)"
   print 'Colors & their indices: '
@@ -48,7 +58,7 @@ def print_turn_start(turn)
   puts ' '
 end
 
-# Getting input of guess for 4 places. Format: '1486'
+## Getting input of guess for 4 places. Format: '1486'
 def take_guess(code_breaker)
   if code_breaker == 'user'
     puts 'Enter your code guess:'
@@ -62,7 +72,7 @@ def take_guess(code_breaker)
   guess_a
 end
 
-# Giving hint as per input & secret code
+## Giving hint as per input & secret code
 def give_hint(guess_a, secret_code_a)
   o = 0 # Correct color, at right place
   x = 0 # Incorrect color
@@ -76,7 +86,7 @@ Incorrect color              : #{x} guesses
  "
 end
 
-# Checking for win & game over
+## Checking for win & game over
 def win_or_game_over?(guess_a, secret_code_a, turn)
   if guess_a == secret_code_a
     puts 'Code breaker is the MASTERMIND!'
@@ -88,17 +98,6 @@ def win_or_game_over?(guess_a, secret_code_a, turn)
   arr = secret_code_a.map { |i| COLORS_HASH[i] }
   puts "Code: [#{arr[0]}] [#{arr[1]}] [#{arr[2]}] [#{arr[3]}]"
   true
-end
-
-### Code maker & Code breaker Methods ###################################
-
-# Code maker
-def make_code(code_maker)
-  return Array.new(4) { (1..8).to_a.sample } if code_maker == 'comp'
-
-  puts 'Code maker, please enter your secret code: '
-  secret_code_a = $stdin.noecho(&:gets).chomp # For hidden input
-  secret_code_a.split('').map(&:to_i)
 end
 
 # Code breaker
@@ -120,7 +119,8 @@ end
 
 def play
   puts "### MASTERMIND ###\n
-Welcome to the new game"
+Welcome to the new game
+ "
   roles_hash = select_roles
   secret_code_a = make_code(roles_hash[:maker])
   break_code(secret_code_a, roles_hash[:breaker])
