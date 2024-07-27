@@ -76,23 +76,21 @@ end
 def give_hint(guess_a, secret_code_a)
   o = 0 # Correct color, at right place
   x = 0 # Incorrect color
-  sc_a = []
-  sc_a.replace(secret_code_a) # copy of secret array
-  g_a = []
-  g_a.replace(guess_a) # copy og guess array
+  secret_code_arr = secret_code_a[0..] # copy of secret code array
+  guess_arr = guess_a[0..] # copy of guess array
 
   4.times do |i|
-    next unless g_a[i] == sc_a[i]
+    next unless guess_arr[i] == secret_code_arr[i]
 
     o += 1
-    g_a[i] = nil
-    sc_a[i] = nil
+    guess_arr[i] = nil
+    secret_code_arr[i] = nil
   end
 
   4.times do |i|
-    next if g_a[i].nil?
+    next if guess_arr[i].nil?
 
-    x += 1 unless sc_a.include? g_a[i]
+    x += 1 unless secret_code_arr.include? guess_arr[i]
   end
 
   puts "Correct color, at right place: #{o} guesses
